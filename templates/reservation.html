@@ -35,7 +35,6 @@
 </head>
 <body>
     <h1>Reserve Your Seat</h1>
-    
     <!-- Form to input reservation date and time -->
     <form id="reservation-form">
         <label for="reservation_start">Reservation Start:</label>
@@ -46,8 +45,10 @@
 
         <button type="submit">Check Availability</button>
     </form>
-
-    <h2>Seat Availability</h2>
+    <form id="view_reservations">
+        <button type="submit">View all reservations</button>
+    </form>
+    
     <div id="results"></div>
 
     <script>
@@ -72,14 +73,46 @@
                     // Render the seat data in a table
                     const seats = data.seats;
                     console.log(seats)
-                    let htmlContent = "<div><ul>";
+                    let htmlContent = "<h2>Seat Availability</h2><div><ul id='reservation_list'>";
 
                     seats.forEach(seat => {
-                        htmlContent += `<li>${seat}</li>`;
+                        htmlContent += `<li data-seat-id="${seat}" data-start-time="${reservationStart}" data-end-time="${reservationEnd}">${seat}</li>`;
                     });
 
                     htmlContent += "</ul></div>";
                     document.getElementById("results").innerHTML = htmlContent;
+                    // Add click event listeners to each list item
+                    const listItems = document.querySelectorAll('#reservation_list li');
+                    listItems.forEach(item => {
+                        item.addEventListener('click', function() {
+                            const seat_id = item.getAttribute('data-seat-id');
+                            const start_time = item.getAttribute('data-start-time');
+                            const end_time = item.getAttribute('data-end-time');
+
+                            // Send the POST request to reserve the seat
+                            fetch('http://127.0.0.1:5003/reserve', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    seat_id: seat_id,
+                                    start_time: start_time,
+                                    end_time: end_time,
+                                    emp_id: "{{ emp_id }}"
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(responseData => {
+                                console.log('Reservation Response:', responseData);
+                                alert(`Reservation for seat ${seat_id} from ${reservationStart} to ${reservationEnd} successful!`);
+                            })
+                            .catch(error => {
+                                console.error('Error making reservation:', error);
+                                alert('There was an error making the reservation.');
+                            });
+                        });
+                    });
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
@@ -90,6 +123,92 @@
                     else
                     {
                         document.getElementById("results").innerHTML = "There was an error fetching the reservation data.";
+                    }
+                });
+        });
+
+        document.getElementById("view_reservations").addEventListener("submit", function(event) {
+            event.preventDefault();
+            console.log("in event")
+            // Send a GET request to the API with the reservation date and time
+            fetch('http://127.0.0.1:5003/view_reserved', {
+                    method: 'POST', // Set the HTTP method to POST
+                    headers: {
+                        'Content-Type': 'application/json', // Specify the content type as JSON
+                    },
+                    body: JSON.stringify({
+                        emp_id: "{{ emp_id }}"
+                    })
+                })
+                .then(response => {
+                    console.log("Response Status:", response.status); // Log the status code
+                    if(response.status == 400)
+                    {
+                        throw new Error(`No seats reserved`)
+                    }
+                    else if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json(); // Parse JSON only if the response is OK
+                })
+                .then(data => {
+                    // Render the seat data in a table
+                    const seats = data.reserved_seats;
+                    console.log(seats)
+                    let htmlContent = "<h2>All Reservations</h2><table><thead><tr><th>Seat ID</th><th>Booking Start Time</th><th>Booking End Time</th></tr></thead><tbody>";
+
+                    seats.forEach(seat => {
+                        htmlContent += `<tr data-seat-id="${seat.seat_id}" data-start-time="${seat.booking_start_time}" data-end-time="${seat.booking_end_time}">
+                            <td>${seat.seat_id}</td>
+                            <td>${seat.booking_start_time}</td>
+                            <td>${seat.booking_end_time}</td>
+                        </tr>`;
+                    });
+
+                    htmlContent += "</tbody></table>";
+                    document.getElementById("results").innerHTML = htmlContent;
+                     // Add click event listeners to each table row
+                    const tableRows = document.querySelectorAll('#results table tbody tr');
+                    tableRows.forEach(row => {
+                        row.addEventListener('click', function() {
+                            const seat_id = row.getAttribute('data-seat-id');
+                            const start_time = row.getAttribute('data-start-time');
+                            const end_time = row.getAttribute('data-end-time');
+
+                            // Send the POST request to reserve the seat
+                            fetch('http://127.0.0.1:5003/cancel_reservation', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    seat_id: seat_id,
+                                    start_time: start_time,
+                                    end_time: end_time,
+                                    emp_id: "{{ emp_id }}" // Flask variable rendering
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(responseData => {
+                                console.log('Reservation Response:', responseData);
+                                alert(`Reservation for seat ${seat_id} from ${start_time} to ${end_time} cancelled!`);
+                            })
+                            .catch(error => {
+                                console.error('Error cancelling reservation:', error);
+                                alert('There was an error canceling the reservation.');
+                            });
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    if(error.message.includes('seats'))
+                    {
+                        document.getElementById("results").innerHTML = "No seats reserved";
+                    }
+                    else
+                    {
+                        document.getElementById("results").innerHTML = "There was an error fetching the reservations.";
                     }
                 });
         });

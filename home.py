@@ -32,7 +32,7 @@ def login():
         response = requests.post('http://127.0.0.1:5001/login', json={'emp_id': emp_id, 'password': password})
 
         if response.status_code == 200:
-            return redirect(url_for('reservation'))  # Redirect to reservation on success
+            return redirect(url_for('reservation', emp_id=emp_id))  # Redirect to reservation on success
         else:
             return response.json()['message']  # Show error message from API
     
@@ -40,7 +40,9 @@ def login():
 
 @app.route('/reservation', methods=['GET','POST'])
 def reservation():
-    return render_template('reservation.html')
+    emp_id = request.args.get('emp_id')
+    print(emp_id)
+    return render_template('reservation.html', emp_id=emp_id)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -27,8 +27,8 @@ class Seat(db.Model):
         return {
             'seat_id': self.seat_id,
             'booked_by': self.booked_by,
-            'booking_start_time': self.booking_start_time.isoformat(),
-            'booking_end_time': self.booking_end_time.isoformat()
+            'booking_start_time': self.booking_start_time.isoformat('T', 'minutes'),
+            'booking_end_time': self.booking_end_time.isoformat('T', 'minutes')
         }
     
 class Manager(db.Model):

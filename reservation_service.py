@@ -4,9 +4,11 @@ from seat_service import Seat
 from sqlalchemy import func
 from datetime import datetime
 from models import db, Seat, Employee, Manager
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app, origins=["http://127.0.0.1:5000"])
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///employee.db'
 app.config['SQLALCHEMY_BINDS'] = {
     'db1': 'sqlite:///employee.db',
@@ -49,13 +51,13 @@ def get_reserved_seats():
     if(seats_arr):
         return jsonify({"reserved_seats": seats_arr}), 200
     else:
-        return jsonify({"message": "no seats reserved"})
+        return jsonify({"message": "no seats reserved"}), 400
 
 @app.route('/cancel_reservation', methods=['POST'])
 def cancel_reservation():
     data = request.get_json()
     emp_id = data['emp_id']
-    seat_id = data['seat_id']
+    seat_id = int(data['seat_id'])
     start_time = data['start_time']
     start_time = datetime.strptime(start_time, "%Y-%m-%dT%H:%M")
     end_time = data['end_time']
