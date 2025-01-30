@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import requests
+from validation import validate_reg_input, validate_login_input
 
 app = Flask(__name__)
 
@@ -10,6 +11,9 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        validation_error = validate_reg_input(request.form)
+        if validation_error:
+            return validation_error
         emp_id = request.form['emp_id']
         emp_name = request.form['emp_name']
         manager_id = request.form['manager_id']
@@ -26,6 +30,9 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        validation_error = validate_login_input(request.form)
+        if validation_error:
+            return validation_error
         emp_id = request.form['emp_id']
         password = request.form['password']
 
