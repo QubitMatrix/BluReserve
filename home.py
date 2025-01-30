@@ -10,10 +10,12 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
+        emp_id = request.form['emp_id']
+        emp_name = request.form['emp_name']
+        manager_id = request.form['manager_id']
         password = request.form['password']
 
-        response = requests.post('http://127.0.0.1:5001/register', json={'username': username, 'password': password})
+        response = requests.post('http://127.0.0.1:5001/register', json={'emp_id': emp_id, 'emp_name': emp_name, 'manager_id': manager_id, 'password': password})
 
         if response.status_code == 201:
             return redirect(url_for('home'))  # Redirect to home on success
@@ -24,10 +26,10 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        emp_id = request.form['emp_id']
         password = request.form['password']
-        
-        response = requests.post('http://127.0.0.1:5001/login', json={'username': username, 'password': password})
+
+        response = requests.post('http://127.0.0.1:5001/login', json={'emp_id': emp_id, 'password': password})
 
         if response.status_code == 200:
             return redirect(url_for('reservation'))  # Redirect to reservation on success
