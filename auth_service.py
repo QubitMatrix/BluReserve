@@ -2,19 +2,16 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token
+from models import db, Employee
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///employee.db'
 app.config['JWT_SECRET_KEY'] = 'your_secret_key'
-db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-class Employee(db.Model):
-    emp_id = db.Column(db.String(100), primary_key=True)
-    emp_name = db.Column(db.String(80), nullable=False)
-    manager_id = db.Column(db.String(100), nullable=False)
-    password = db.Column(db.String(200), nullable=False)
+db.init_app(app)
+
 
 @app.route('/register', methods=['POST'])
 def register():

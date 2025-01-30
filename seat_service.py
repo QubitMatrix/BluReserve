@@ -3,19 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_cors import CORS
 from datetime import datetime
+from models import db, Seat
 
 app = Flask(__name__)
 CORS(app, origins=["http://127.0.0.1:5000"])
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///seat.db'
-db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///seat1.db'
 
-class Seat(db.Model):
-    seat_id = db.Column(db.Integer, primary_key=True)
-    #capacity = db.Column(db.Integer, nullable=False)
-    #is_booked = db.Column(db.Boolean, default=False)
-    booked_by = db.Column(db.String(100))
-    booking_start_time = db.Column(db.DateTime, primary_key=True)
-    booking_end_time = db.Column(db.DateTime, primary_key=True)
+db.init_app(app)
+
 
 @app.route('/seats', methods=['GET'])
 def get_seats():
