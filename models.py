@@ -12,7 +12,7 @@ class Employee(db.Model):
 
 class Seat(db.Model):
     __bind_key__ = 'db2'
-    __tablename__ = 'seat2'
+    __tablename__ = 'seat'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     seat_id = db.Column(db.Integer)
     #capacity = db.Column(db.Integer, nullable=False)

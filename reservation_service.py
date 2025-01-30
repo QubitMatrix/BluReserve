@@ -12,7 +12,7 @@ CORS(app, origins=["http://127.0.0.1:5000"])
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///employee.db'
 app.config['SQLALCHEMY_BINDS'] = {
     'db1': 'sqlite:///employee.db',
-    'db2': 'sqlite:///seat2.db',
+    'db2': 'sqlite:///seat.db',
     'db3': 'sqlite:///manager.db' 
 }
 db.init_app(app)

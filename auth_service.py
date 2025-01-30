@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///employee.db'
 app.config['SQLALCHEMY_BINDS'] = {
     'db1': 'sqlite:///employee.db',
-    'db2': 'sqlite:///seat2.db',
+    'db2': 'sqlite:///seat.db',
     'db3': 'sqlite:///manager.db' 
 }
 app.config['JWT_SECRET_KEY'] = 'your_secret_key'

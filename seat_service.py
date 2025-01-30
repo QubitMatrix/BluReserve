@@ -7,10 +7,10 @@ from models import db, Seat
 
 app = Flask(__name__)
 CORS(app, origins=["http://127.0.0.1:5000"])
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///seat2.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///seat.db'
 app.config['SQLALCHEMY_BINDS'] = {
     'db1': 'sqlite:///employee.db',
-    'db2': 'sqlite:///seat1.db',
+    'db2': 'sqlite:///seat.db',
     'db3': 'sqlite:///manager.db' 
 }
 
