@@ -2,10 +2,15 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token
-from models import db, Employee
+from models import db, Employee, Manager
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///employee.db'
+app.config['SQLALCHEMY_BINDS'] = {
+    'db1': 'sqlite:///employee.db',
+    'db2': 'sqlite:///seat2.db',
+    'db3': 'sqlite:///manager.db' 
+}
 app.config['JWT_SECRET_KEY'] = 'your_secret_key'
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
@@ -36,6 +41,17 @@ def login():
         return jsonify({'access_token': access_token}), 200
     return jsonify({'message': 'Invalid credentials'}), 401
 
+@app.route('/add_manager', methods=['POST'])
+def add_manager():
+    data = request.get_json()
+    manager_id = data['manager_id']
+    blu_dollars = data['blu_dollars']
+    new_manager = Manager(manager_id=manager_id, blu_dollars=blu_dollars)
+    db.session.add(new_manager)
+    db.session.commit()
+    return jsonify({'message': 'Manager added successfully'})
+
+    
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

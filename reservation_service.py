@@ -3,11 +3,16 @@ from flask_sqlalchemy import SQLAlchemy
 from seat_service import Seat
 from sqlalchemy import func
 from datetime import datetime
-from models import db, Seat, Employee
+from models import db, Seat, Employee, Manager
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///seat1.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///employee.db'
+app.config['SQLALCHEMY_BINDS'] = {
+    'db1': 'sqlite:///employee.db',
+    'db2': 'sqlite:///seat2.db',
+    'db3': 'sqlite:///manager.db' 
+}
 db.init_app(app)
 
 @app.route('/reserve', methods=['POST'])
@@ -22,6 +27,14 @@ def reserve_seat():
     booked_seat = Seat(seat_id=seat_id, booked_by=emp_id, booking_start_time=start_time, booking_end_time=end_time)
     db.session.add(booked_seat)
     db.session.commit()
+    emp = Employee.query.filter_by(emp_id=emp_id).first()
+    manager_id = emp.manager_id
+    print(manager_id)
+    manager = Manager.query.filter_by(manager_id=manager_id).first()
+    print(manager.blu_dollars)
+    if(manager):
+        manager.blu_dollars -= 1
+        db.session.commit()
     return jsonify({"message":"Booking successful"}), 201
 
 @app.route('/view_reserved', methods=['POST'])
@@ -53,6 +66,14 @@ def cancel_reservation():
         seat.booking_start_time=None
         seat.booking_end_time = None
         db.session.commit()
+        emp = Employee.query.filter_by(emp_id=emp_id).first()
+        manager_id = emp.manager_id
+        print(manager_id)
+        manager = Manager.query.filter_by(manager_id=manager_id).first()
+        print(manager.blu_dollars)
+        if(manager):
+            manager.blu_dollars += 1
+            db.session.commit()
         return jsonify({"message": "Seat canceled successfully"})
     else:
         return jsonify({"message": "Seat not found"})
