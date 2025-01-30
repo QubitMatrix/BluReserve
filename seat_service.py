@@ -52,22 +52,22 @@ def get_seats():
 
 @app.route('/add_seats', methods=['POST'])
 def add_seats():
-    # data = request.get_json()
-    # count = data['count']
-    # existing_count = db.session.query(func.max(Seat.seat_id)).scalar()
-    # for i in range(1, count+1):
-    #     new_id = existing_count + i
-    #     new_seat = Seat(seat_id=new_id)
-    #     db.session.add(new_seat)
-    #     db.session.commit()
-    # print(count, existing_count)
-    datetime_string = "2025-01-23T21:10"
-    a1 = datetime.strptime(datetime_string, "%Y-%m-%dT%H:%M")
-    datetime_string = "2025-01-23T21:30"
-    a2 = datetime.strptime(datetime_string, "%Y-%m-%dT%H:%M")
-    new_seat = Seat(seat_id=22,booked_by="eid1", booking_start_time=a1, booking_end_time=a2)
-    db.session.add(new_seat)
-    db.session.commit()
+    data = request.get_json()
+    count = data['count']
+    existing_count = db.session.query(func.max(Seat.seat_id)).scalar()
+    for i in range(1, count+1):
+        new_id = existing_count + i
+        new_seat = Seat(seat_id=new_id)
+        db.session.add(new_seat)
+        db.session.commit()
+    print(count, existing_count)
+    # datetime_string = "2025-01-23T21:10"
+    # a1 = datetime.strptime(datetime_string, "%Y-%m-%dT%H:%M")
+    # datetime_string = "2025-01-23T21:30"
+    # a2 = datetime.strptime(datetime_string, "%Y-%m-%dT%H:%M")
+    # new_seat = Seat(seat_id=22,booked_by="eid1", booking_start_time=a1, booking_end_time=a2)
+    # db.session.add(new_seat)
+    # db.session.commit()
     return jsonify({"message": "new seats added"})
 
 if __name__ == '__main__':
