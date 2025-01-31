@@ -5,91 +5,257 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservation Form</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
+        /* Import a legible font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, rgba(0, 5, 20, 0.95) 20%, rgba(0, 0, 40, 1) 100%), 
+                        url('https://example.com/ibm-kochi.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .form-group input,
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            outline: none;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-group input:focus,
+        button:focus {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        button {
+            background: rgba(0, 97, 242, 0.85);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: rgba(0, 97, 242, 1);
+            transform: scale(1.05);
+        }
+
+        .results {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        /* Style the grid layout for seat availability */
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr); /* 10 seats per row */
+            gap: 10px;
+            padding: 10px;
+            justify-items: center;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .seat {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 80px;
+            backdrop-filter: blur(8px);
+        }
+
+        .seat:hover {
+            background: rgba(0, 97, 242, 0.8);
+        }
+
+        .booked {
+            background: rgba(72, 0, 255, 0.768);
+        }
+
+        .available {
+            background: rgb(0, 17, 255);
+        }
+
+        /* Reverting the View Reservations table style */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
+
         th, td {
-            padding: 8px 12px;
+            padding: 12px 15px;
             text-align: left;
             border: 1px solid #ddd;
         }
+
         th {
             background-color: #f2f2f2;
+            color: #333;
         }
-        .booked {
-            color: red;
+
+        tr:nth-child(even) {
+            background-color: inherit;
         }
-        .available {
-            color: green;
+
+        tr:hover {
+            background-color: #e1e1e128;
         }
-        form {
-            margin-bottom: 20px;
+
+        /* Style for the cancel reservation button in the table */
+        .cancel-btn {
+            background: rgb(0, 17, 255);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background: rgb(2, 11, 144);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            button {
+                font-size: 16px;
+                padding: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Reserve Your Seat</h1>
-    <!-- Form to input reservation date and time -->
-    <form id="reservation-form">
-        <label for="reservation_start">Reservation Start:</label>
-        <input type="datetime-local" id="reservation_start" name="reservation_start" required><br><br>
+    <div class="container">
+        <h1>Reserve Your Seat</h1>
 
-        <label for="reservation_end">Reservation End:</label>
-        <input type="datetime-local" id="reservation_end" name="reservation_end" required><br><br>
+        <!-- Form to input reservation date and time -->
+        <form id="reservation-form">
+            <div class="form-group">
+                <label for="reservation_start">Reservation Start:</label>
+                <input type="datetime-local" id="reservation_start" name="reservation_start" required>
+            </div>
 
-        <button type="submit">Check Availability</button>
-    </form>
-    <form id="view_reservations">
-        <button type="submit">View all reservations</button>
-    </form>
-    
-    <div id="results"></div>
+            <div class="form-group">
+                <label for="reservation_end">Reservation End:</label>
+                <input type="datetime-local" id="reservation_end" name="reservation_end" required>
+            </div>
+
+            <button type="submit">Check Availability</button>
+        </form>
+
+        <!-- View Reservations Form -->
+        <form id="view_reservations">
+            <button type="submit">View All Reservations</button>
+        </form>
+
+        <div id="results" class="results"></div>
+    </div>
 
     <script>
         document.getElementById("reservation-form").addEventListener("submit", function(event) {
             event.preventDefault();
 
-            // Get date and time from the form
             const reservationStart = document.getElementById("reservation_start").value;
             const reservationEnd = document.getElementById("reservation_end").value;
             console.log(reservationStart)
 
-            // Send a GET request to the API with the reservation date and time
             fetch(`http://127.0.0.1:5002/seats?slot_start=${reservationStart}&slot_end=${reservationEnd}`)
                 .then(response => {
-                    console.log("Response Status:", response.status); // Log the status code
+                    console.log("Response Status:", response.status);
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
-                    return response.json(); // Parse JSON only if the response is OK
+                    return response.json();
                 })
                 .then(data => {
-                    // Render the seat data in a table
                     const seats = data.seats;
-                    console.log(seats)
-                    let htmlContent = "<h2>Seat Availability</h2><div><ul id='reservation_list'>";
+                    let htmlContent = "<h2>Seat Availability</h2><div class='seat-grid'>";
 
                     seats.forEach(seat => {
-                        htmlContent += `<li data-seat-id="${seat}" data-start-time="${reservationStart}" data-end-time="${reservationEnd}">${seat}</li>`;
+                        htmlContent += `<div class="seat available" data-seat-id="${seat}" data-start-time="${reservationStart}" data-end-time="${reservationEnd}">${seat}</div>`;
                     });
 
-                    htmlContent += "</ul></div>";
+                    htmlContent += "</div>";
                     document.getElementById("results").innerHTML = htmlContent;
-                    // Add click event listeners to each list item
-                    const listItems = document.querySelectorAll('#reservation_list li');
-                    listItems.forEach(item => {
+
+                    const seatElements = document.querySelectorAll('.seat');
+                    seatElements.forEach(item => {
                         item.addEventListener('click', function() {
                             const seat_id = item.getAttribute('data-seat-id');
                             const start_time = item.getAttribute('data-start-time');
                             const end_time = item.getAttribute('data-end-time');
 
-                            // Send the POST request to reserve the seat
                             fetch('http://127.0.0.1:5003/reserve', {
                                 method: 'POST',
                                 headers: {
@@ -105,7 +271,7 @@
                             .then(response => response.json())
                             .then(responseData => {
                                 console.log('Reservation Response:', responseData);
-                                alert(`Reservation for seat ${seat_id} from ${reservationStart} to ${reservationEnd} successful!`);
+                                alert(`Reservation for seat ${seat_id} from ${start_time} to ${end_time} successful!`);
                             })
                             .catch(error => {
                                 console.error('Error making reservation:', error);
@@ -118,99 +284,98 @@
                     console.error('Error fetching data:', error);
                     if(error.message.includes(400))
                     {
-                        document.getElementById("results").innerHTML = "Start time should be before end time";
+                    document.getElementById("results").innerHTML = "Start time should be before end time";
                     }
                     else
                     {
-                        document.getElementById("results").innerHTML = "There was an error fetching the reservation data.";
+                        document.getElementById("results").innerHTML = "Error fetching seat availability.";
                     }
                 });
         });
 
         document.getElementById("view_reservations").addEventListener("submit", function(event) {
             event.preventDefault();
-            console.log("in event")
-            // Send a GET request to the API with the reservation date and time
+
             fetch('http://127.0.0.1:5003/view_reserved', {
-                    method: 'POST', // Set the HTTP method to POST
-                    headers: {
-                        'Content-Type': 'application/json', // Specify the content type as JSON
-                    },
-                    body: JSON.stringify({
-                        emp_id: "{{ emp_id }}"
-                    })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    emp_id: "{{ emp_id }}"
                 })
-                .then(response => {
-                    console.log("Response Status:", response.status); // Log the status code
-                    if(response.status == 400)
+            })
+            .then(response => {
+                    if(response.status === 400)
                     {
                         throw new Error(`No seats reserved`)
                     }
                     else if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json(); // Parse JSON only if the response is OK
-                })
-                .then(data => {
-                    // Render the seat data in a table
-                    const seats = data.reserved_seats;
-                    console.log(seats)
-                    let htmlContent = "<h2>All Reservations</h2><table><thead><tr><th>Seat ID</th><th>Booking Start Time</th><th>Booking End Time</th></tr></thead><tbody>";
+                }
+                return response.json();
+            })
+            .then(data => {
+                const seats = data.reserved_seats;
+                let htmlContent = "<h2>All Reservations</h2><table><thead><tr><th>Seat ID</th><th>Booking Start Time</th><th>Booking End Time</th><th>Action</th></tr></thead><tbody>";
 
-                    seats.forEach(seat => {
-                        htmlContent += `<tr data-seat-id="${seat.seat_id}" data-start-time="${seat.booking_start_time}" data-end-time="${seat.booking_end_time}">
-                            <td>${seat.seat_id}</td>
-                            <td>${seat.booking_start_time}</td>
-                            <td>${seat.booking_end_time}</td>
-                        </tr>`;
-                    });
+                seats.forEach(seat => {
+                    htmlContent += `<tr data-seat-id="${seat.seat_id}" data-start-time="${seat.booking_start_time}" data-end-time="${seat.booking_end_time}">
+                        <td>${seat.seat_id}</td>
+                        <td>${seat.booking_start_time}</td>
+                        <td>${seat.booking_end_time}</td>
+                        <td><button class="cancel-btn">Cancel</button></td>
+                    </tr>`;
+                });
 
-                    htmlContent += "</tbody></table>";
-                    document.getElementById("results").innerHTML = htmlContent;
-                     // Add click event listeners to each table row
-                    const tableRows = document.querySelectorAll('#results table tbody tr');
-                    tableRows.forEach(row => {
-                        row.addEventListener('click', function() {
-                            const seat_id = row.getAttribute('data-seat-id');
-                            const start_time = row.getAttribute('data-start-time');
-                            const end_time = row.getAttribute('data-end-time');
+                htmlContent += "</tbody></table>";
+                document.getElementById("results").innerHTML = htmlContent;
 
-                            // Send the POST request to reserve the seat
-                            fetch('http://127.0.0.1:5003/cancel_reservation', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    seat_id: seat_id,
-                                    start_time: start_time,
-                                    end_time: end_time,
-                                    emp_id: "{{ emp_id }}" // Flask variable rendering
-                                })
+                // Adding Cancel functionality
+                document.querySelectorAll('.cancel-btn').forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const row = button.closest('tr');
+                        const seat_id = row.getAttribute('data-seat-id');
+                        const start_time = row.getAttribute('data-start-time');
+                        const end_time = row.getAttribute('data-end-time');
+
+                        fetch('http://127.0.0.1:5003/cancel_reservation', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                seat_id: seat_id,
+                                start_time: start_time,
+                                end_time: end_time,
+                                emp_id: "{{ emp_id }}"
                             })
-                            .then(response => response.json())
-                            .then(responseData => {
-                                console.log('Reservation Response:', responseData);
-                                alert(`Reservation for seat ${seat_id} from ${start_time} to ${end_time} cancelled!`);
-                            })
-                            .catch(error => {
-                                console.error('Error cancelling reservation:', error);
-                                alert('There was an error canceling the reservation.');
-                            });
+                        })
+                        .then(response => response.json())
+                        .then(responseData => {
+                            console.log('Reservation cancelled:', responseData);
+                            alert(`Reservation for seat ${seat_id} from ${start_time} to ${end_time} cancelled!`);
+                            row.remove();  // Remove the row from the table after cancellation
+                        })
+                        .catch(error => {
+                            console.error('Error cancelling reservation:', error);
+                            alert('There was an error cancelling the reservation.');
                         });
                     });
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    if(error.message.includes('seats'))
-                    {
-                        document.getElementById("results").innerHTML = "No seats reserved";
-                    }
-                    else
-                    {
-                        document.getElementById("results").innerHTML = "There was an error fetching the reservations.";
-                    }
                 });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                if(error.message.includes('seats'))
+                {
+                    document.getElementById("results").innerHTML = "No seats reserved";
+                }
+                else
+                {
+                    document.getElementById("results").innerHTML = "There was an error fetching the reservations.";
+                }
+            });
         });
     </script>
 </body>
