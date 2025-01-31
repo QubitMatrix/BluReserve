@@ -4,14 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    <style>
+        body {
+            font-family: 'Kochi', sans-serif;
+            background-image: url('https://www.commercialdesignindia.com/cloud/2023/07/06/38.jpg'); 
+            background-position: center;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            padding: 50px;
+            width: 90%;
+            max-width: 600px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+        h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .buttons {
+            display: flex;
+            gap: 30px;
+        }
+        .btn {
+            background-color: #0061F2; /* IBM Blue */
+            color: white;
+            padding: 15px 35px;
+            text-decoration: none;
+            font-size: 1.3em;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .btn:hover {
+            background-color: #004BB5;
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            transform: translateY(2px);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Welcome to IBM BluReserve!</h1>
 
         <div class="buttons">
-            <a href="{{ url_for('register') }}" class="btn">Register</a>
-            <a href="{{ url_for('login') }}" class="btn">Login</a>
+            <a href="{{ url_for('register') }}" class="btn">Create an Account</a>
+            <a href="{{ url_for('login') }}" class="btn">Login to Your Account</a>
         </div>
     </div>
 </body>
