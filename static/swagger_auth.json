@@ -1,0 +1,126 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Access API",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/register": {
+        "post": {
+          "description": "Allows employee to register to BluReserve",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "registration data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Employee"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Employee registration operation"
+            },
+            "*": {
+                "description": "Error in registration"
+            }
+          }
+        }
+      },
+      "/login": {
+        "post": {
+          "description": "Employee Login to BluReserve",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "login data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Employee"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User granted access"
+            },
+            "401": {
+              "description": "Invalid credentials"
+            }
+          }
+        }
+      },
+      "/add_manager": {
+        "post": {
+          "description": "Add manager details to BluReserve",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "manager data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Manager"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Manager added successfully"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Employee": {
+        "type": "object",
+        "properties": {
+          "emp_id": {
+            "type": "string"
+          },
+          "emp_name": {
+            "type": "string"
+          },
+          "manager_id": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Manager": {
+        "type": "object",
+        "properties": {
+          "manager_id": {
+            "type": "string"
+          },
+          "blu_dollars": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }

@@ -5,6 +5,7 @@ from sqlalchemy import func
 from datetime import datetime
 from models import db, Seat, Employee, Manager
 from flask_cors import CORS
+from flask_swagger_ui import get_swaggerui_blueprint
 
 
 app = Flask(__name__)
@@ -15,6 +16,20 @@ app.config['SQLALCHEMY_BINDS'] = {
     'db2': 'sqlite:///seat.db',
     'db3': 'sqlite:///manager.db' 
 }
+
+# Swagger setup
+SWAGGER_URL="/swagger"
+API_URL="/static/swagger_seat.json"
+
+swagger_ui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': 'Seat API'
+    }
+)
+app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
+
 db.init_app(app)
 
 @app.route('/reserve', methods=['POST'])
@@ -76,9 +91,9 @@ def cancel_reservation():
         if(manager):
             manager.blu_dollars += 1
             db.session.commit()
-        return jsonify({"message": "Seat canceled successfully"})
+        return jsonify({"message": "Seat canceled successfully"}), 200
     else:
-        return jsonify({"message": "Seat not found"})
+        return jsonify({"message": "Seat not found"}), 404
     
 if __name__ == '__main__':
     with app.app_context():

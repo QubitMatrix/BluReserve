@@ -1,0 +1,83 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Seat API",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/seats": {
+        "get": {
+          "description": "Takes the start and end slot and returns available seats",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "slot_start",
+              "description": "Start time of slot",
+              "required": false
+            },
+            {
+              "name": "slot_end",
+              "description": "End time of slot",
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successfully retrieved seats"
+            },
+            "400": {
+              "description": "Invalid availability request"
+            }
+          }
+        }
+      },
+      "/add_seats": {
+        "post": {
+          "description": "Allows administrator to add new seats to cafeteria",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "seat count",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Seat"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "New seats added"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Seat": {
+        "type": "object",
+        "properties": {
+          "seat_id": {
+            "type": "integer"
+          },
+          "booked_by": {
+            "type": "string"
+          },
+          "booking_start_time": {
+            "type": "datetime"
+          },
+          "booking_end_time": {
+            "type": "datetime"
+          }
+        }
+      }
+    }
+  }

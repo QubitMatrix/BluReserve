@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token
 from models import db, Employee, Manager
+from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///employee.db'
@@ -14,6 +15,19 @@ app.config['SQLALCHEMY_BINDS'] = {
 app.config['JWT_SECRET_KEY'] = 'your_secret_key'
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+
+# Swagger setup
+SWAGGER_URL="/swagger"
+API_URL="/static/swagger_auth.json"
+
+swagger_ui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': 'Access API'
+    }
+)
+app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 db.init_app(app)
 

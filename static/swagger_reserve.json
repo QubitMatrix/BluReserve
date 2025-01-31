@@ -1,0 +1,109 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Reserve API",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/reserve": {
+        "post": {
+          "description": "Allow Employee to reserve a seat at chosen start to end slot",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "reservation data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Seat"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Booking successful"
+            }
+          }
+        }
+      },
+      "/view_reserved": {
+        "post": {
+          "description": "Allow Employee to view all their reservations",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "employee data",
+              "in": "body",
+              "description": "JSON data for the api",
+             "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "View reserved seats"
+            },
+            "400": {
+              "description": "No reserved seats"
+            }
+          }
+        }
+      },
+      "/cancel_reservation": {
+        "post": {
+          "description": "Allow Employee to cancel a reservation",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "reservation data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Seat canceled successfully"
+            },
+            "404": {
+              "description": "Seat not found"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Seat": {
+        "type": "object",
+        "properties": {
+          "seat_id": {
+            "type": "integer"
+          },
+          "booked_by": {
+            "type": "string"
+          },
+          "booking_start_time": {
+            "type": "datetime"
+          },
+          "booking_end_time": {
+            "type": "datetime"
+          }
+        }
+      }
+    }
+  }
